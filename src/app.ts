@@ -3,8 +3,9 @@ import express, {
   type Request,
   type Response,
 } from "express";
-import bcrypt from "bcrypt";
-import { initDB, pool } from "./db";
+
+import {pool } from "./db";
+import { userRoute } from "./modules/user/user.route";
 
 const app: Application = express();
 
@@ -12,7 +13,7 @@ app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
-initDB();
+
 
 // home page get api
 app.get("/", (req: Request, res: Response) => {
@@ -22,6 +23,8 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
+
+app.use('/api/users', userRoute)
 // get single user
 
 app.get("/api/users/:id", async (req: Request, res: Response) => {
@@ -76,34 +79,7 @@ app.get("/api/users", async (req: Request, res: Response) => {
   }
 });
 // post api create a user
-app.post("/api/users", async (req: Request, res: Response) => {
-  //   console.log(req.body);
-  const { name, email, password, role } = req.body;
 
-  const hashPassword = await bcrypt.hash(password, 10)
-
-  try {
-    const result = await pool.query(
-      `
-     INSERT INTO users(name,email,password,role) VALUES($1,$2,$3,$4) RETURNING *
-    `,
-      [name, email,hashPassword,role],
-    );
-    // console.log(result);
-
-    res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-      data: result.rows[0],
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-      error: error,
-    });
-  }
-});
 
 app.put("/api/users/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
