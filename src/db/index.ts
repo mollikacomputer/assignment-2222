@@ -20,6 +20,33 @@ export const initDB = async () => {
         updated_at TIMESTAMP DEFAULT NOW()
         )
             `);
+
+    await pool.query(`
+    CREATE TABLE issues (
+    id SERIAL PRIMARY KEY,
+
+    title VARCHAR(150) NOT NULL
+        CHECK (char_length(title) <= 150),
+
+    description TEXT NOT NULL
+        CHECK (char_length(description) >= 20),
+
+    type VARCHAR(20) NOT NULL
+        CHECK (type IN ('bug', 'feature_request')),
+
+    status VARCHAR(20) DEFAULT 'open'
+        CHECK (status IN ('open', 'in_progress', 'resolved')),
+
+    issues_id INT UNIQUE
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+    `);
+    
     console.log("Database connected successfully!");
   } catch (error) {
     console.log(error);
