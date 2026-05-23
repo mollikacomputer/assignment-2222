@@ -3,7 +3,6 @@ import express, {
   type Request,
   type Response,
 } from "express";
-
 import {pool } from "./db";
 import { userRoute } from "./modules/user/user.route";
 
@@ -59,25 +58,7 @@ app.get("/api/users/:id", async (req: Request, res: Response) => {
   }
 });
 
-// getApi get all user
-app.get("/api/users", async (req: Request, res: Response) => {
-  try {
-    const result = await pool.query(`
-      SELECT * FROM users  
-        `);
-    res.status(200).json({
-      success: true,
-      message: "Users retrived successfully!",
-      data: result.rows,
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-      error: error,
-    });
-  }
-});
+
 // post api create a user
 
 

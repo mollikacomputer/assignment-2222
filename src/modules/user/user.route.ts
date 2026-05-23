@@ -5,4 +5,7 @@ const router = Router();
 
 router.post("/", userController.createUser);
 
+// getApi get all user
+router.get("/", userController.getAllUser);
+
 export const userRoute = router;
