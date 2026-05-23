@@ -8,4 +8,7 @@ router.post("/", userController.createUser);
 // getApi get all user
 router.get("/", userController.getAllUser);
 
+router.get("/:id", userController.getSingleUser );
+
+
 export const userRoute = router;
