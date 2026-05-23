@@ -7,7 +7,7 @@ const createUserIntoDB = async(payLoad:IUser) =>{
     const hashPassword = await bcrypt.hash(password, 10)
     const result = await pool.query(
       `
-     INSERT INTO users(name,email, password, role) VALUES($1,$2,$3,$4) RETURNING name, email, role
+     INSERT INTO users(name,email, password, role) VALUES($1,$2,$3,$4) RETURNING id, name, email, role
     `,
       [name, email, hashPassword,role],
     );
@@ -48,6 +48,16 @@ const updateUserFromDB = async(payLoad:IUser, id:string)=>{
       [name, email, password, role, id],
     );
 return result;
+};
+// delete api
+const deleteUserFromDB = async(id:string)=>{
+      const result = await pool.query(
+      `
+    DELETE FROM users WHERE id=$1  
+      `,
+      [id],
+    );
+return result;
 }
 
 export const userService ={
@@ -55,4 +65,5 @@ export const userService ={
     getAllUserFromDB,
     getSingleUserFromDB,
     updateUserFromDB,
+    deleteUserFromDB,
 }
