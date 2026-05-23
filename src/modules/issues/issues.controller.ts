@@ -3,7 +3,13 @@ import { issuesService } from "./issues.servivce";
 
 const createIssues = async(req : Request, res :Response)=>{
     try {
-    const result = await issuesService.createIssuesIntoDB(req.body)
+    const result = await issuesService.createIssuesIntoDB(req.body);
+
+    res.status(201).json({
+        status:true,
+        message:"Issues created successfully!!",
+        data:result.rows[0],
+    })
     } catch (error:any) {
     res.status(500).json({
     success: false,
