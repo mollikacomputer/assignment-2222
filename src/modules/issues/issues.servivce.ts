@@ -1,21 +1,39 @@
 import { pool } from "../../db";
+import type { IIssue } from "./issueInterface";
 
-const createIssuesIntoDB = async(payLoad:any)=>{
-    console.log(payLoad);
+const createIssuesIntoDB = async (payLoad: IIssue) => {
 
-const {issues_id, title, description, type, status, reported_id} = payLoad;
-const user = await pool.query(`
+  const { title, description, type, status, reported_id } = payLoad;
+
+  // check user exists
+  const user = await pool.query(
+    `
     SELECT * FROM users WHERE id=$1
-    `, [issues_id])
+    `,
+    [reported_id]
+  );
 
-if(user.rows.length === 0){
+  if (user.rows.length === 0) {
     throw new Error("User not found!!");
+  }
+
+  // create issue
+  const result = await pool.query(
+    `
+    INSERT INTO issues
+    (title, description, type, status, reported_id)
+
+    VALUES($1, $2, $3, $4, $5)
+
+    RETURNING *
+    `,
+    [title, description, type, status, reported_id]
+  );
+
+  return result;
 };
-const result = await pool.query(`
-    INSERT INTO issues(issues_id, title, description, type, status, reported_id) VALUES($1, $2,$3, $4, $5, 6$) RETURNING *
-    `, [issues_id, title, description, type, status, reported_id]);
-    return result;
-}
+
 export const issuesService = {
-    createIssuesIntoDB
-}
+  createIssuesIntoDB,
+};
+
