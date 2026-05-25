@@ -12,7 +12,7 @@ router.get("/", userController.getAllUser);
 
 router.get("/:id", userController.getSingleUser );
 
-router.put("/:id", userController.getSingleUser);
+router.put("/:id", userController.updateUser);
 
 router.delete("/:id", userController.deleteUser);
 

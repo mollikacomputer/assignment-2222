@@ -6,7 +6,7 @@ const signupUser = async(req: Request, res: Response)=>{
     const result = await authService.signupUserIntoDB(req.body)
     res.status(201).json({
         status:true,
-        message:"Issues created successfully!!",
+        message:"User Signup successfully!!",
         data:result,
         })
     } catch (error:any) {
@@ -16,7 +16,7 @@ const signupUser = async(req: Request, res: Response)=>{
         error: error,
         });
     }
-}
+};
 export const authController ={
     signupUser,
 }
