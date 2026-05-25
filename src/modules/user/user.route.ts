@@ -6,14 +6,9 @@ import { userService } from "./user.service";
 const router = Router();
 
 router.post("/", userController.createUser);
-
-// getApi get all user
 router.get("/", userController.getAllUser);
-
 router.get("/:id", userController.getSingleUser );
-
 router.put("/:id", userController.updateUser);
-
 router.delete("/:id", userController.deleteUser);
 
 export const userRoute = router;
