@@ -1,5 +1,5 @@
 export interface IIssue{
-issues_id:string,
+id:string,
 title:string,
 description:string,
 type:string,

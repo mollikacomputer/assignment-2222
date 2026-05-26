@@ -8,7 +8,7 @@ export const initDB = async () => {
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users(
-        id SERIAL PRIMARY KEY,
+        id SERIAL UNIQUE PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
         email VARCHAR(100) UNIQUE NOT NULL,
         password TEXT NOT NULL,
@@ -23,28 +23,28 @@ export const initDB = async () => {
 
 
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS issues(
-        id SERIAL PRIMARY KEY,
+  CREATE TABLE IF NOT EXISTS issues(
+    id INT,
 
-        title VARCHAR(150) NOT NULL
-          CHECK (char_length(title) <= 150),
+    title VARCHAR(150) NOT NULL
+        CHECK (char_length(title) <= 150),
 
-        description TEXT NOT NULL
-          CHECK (char_length(description) >= 20),
+    description TEXT NOT NULL
+        CHECK (char_length(description) >= 20),
 
-        type VARCHAR(20) NOT NULL
-          CHECK (type IN ('bug', 'feature_request')),
+    type VARCHAR(20) NOT NULL
+        CHECK (type IN ('bug', 'feature_request')),
 
-        status VARCHAR(20) DEFAULT 'open'
-          CHECK (status IN ('open', 'in_progress', 'resolved')),
+    status VARCHAR(20) DEFAULT 'open'
+        CHECK (status IN ('open', 'in_progress', 'resolved')),
 
-          reported_id INT NOT NULL
-          REFERENCES users(id)
-          ON DELETE CASCADE,
+    reported_id INT NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
 
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
     `);
 
     console.log("Database connected successfully!");
@@ -52,51 +52,3 @@ export const initDB = async () => {
     console.log(error);
   }
 };
-
-// export const initDB = async () => {
-//   try {
-//     await pool.query(`
-//         CREATE TABLE IF NOT EXISTS users(
-//         id SERIAL PRIMARY KEY,
-//         name VARCHAR(100),
-//         email VARCHAR(100) UNIQUE NOT NULL,
-//         password TEXT NOT NULL,
-//         role VARCHAR(20) NOT NULL DEFAULT 'contributor'
-//         CHECK (role IN ('contributor', 'maintainer')),
-
-//         created_at TIMESTAMP DEFAULT NOW(),
-//         updated_at TIMESTAMP DEFAULT NOW()
-//         );
-//             `);
-
-//     await pool.query(`
-//     CREATE TABLE issues (
-//     id SERIAL PRIMARY KEY,
-
-//     title VARCHAR(150) NOT NULL
-//         CHECK (char_length(title) <= 150),
-
-//     description TEXT NOT NULL
-//         CHECK (char_length(description) >= 20),
-
-//     type VARCHAR(20) NOT NULL
-//         CHECK (type IN ('bug', 'feature_request')),
-
-//     status VARCHAR(20) DEFAULT 'open'
-//         CHECK (status IN ('open', 'in_progress', 'resolved')),
-
-//     issues_id INT UNIQUE
-//         REFERENCES users(id)
-//         ON DELETE CASCADE,
-
-//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-//     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-// );
-//     `);
-    
-//     console.log("Database connected successfully!");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
