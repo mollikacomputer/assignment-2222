@@ -1,5 +1,6 @@
 import type { Request, Response } from "express"
 import { issuesService } from "./issues.servivce";
+import type { IIssue } from "./issueInterface";
 
 
 const createIssue = async (req: Request, res: Response,) => {
@@ -19,9 +20,9 @@ const createIssue = async (req: Request, res: Response,) => {
   }
 };
 
-const updateIssues = async(req:Request, res: Response, id: string) =>{
+const updateIssues = async(req:Request, res:Response,) =>{
   try {
-    const result = await issuesService.updateIssueFromDB(req.body, id as string);
+    const result = await issuesService.updateIssueFromDB(req.body);
     res.status(201).json({
         status:true,
         message:"Issues UPDATED successfully!!",

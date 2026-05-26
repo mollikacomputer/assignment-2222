@@ -30,7 +30,7 @@ const updateIssueFromDB = async (payLoad:IIssue)=>{
     UPDATE issues
     SET 
     title=COALESCE($1,title),
-    description=COALESCE($2,description), type=COALESCE($3,type) WHERE reported_id=$4 RETURNING title, description, type
+    description=COALESCE($2,description), type=COALESCE($3,type) WHERE reported_id=$4 RETURNING *
     `,
       [title, description, type, reported_id],
     );
