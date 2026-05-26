@@ -1,8 +1,16 @@
 import { pool } from "../../db";
 import type { IIssue } from "./issueInterface";
 
-const createIssuesIntoDB = async (payLoad: IIssue) => {
+//get all issues
 
+const getAllIssuesFromDB = async()=>{
+      const result = await pool.query(`
+      SELECT id, title, description, type, reported_id FROM issues  
+        `);
+  return result;      
+}
+//create issues
+const createIssuesIntoDB = async (payLoad: IIssue) => {
  const {id, title, description, status,type, reported_id } = payLoad;
  const user = await pool.query(
   `
@@ -40,4 +48,5 @@ const updateIssueFromDB = async (payLoad:IIssue)=>{
 export const issuesService = {
   createIssuesIntoDB,
   updateIssueFromDB,
+  getAllIssuesFromDB,
 };
