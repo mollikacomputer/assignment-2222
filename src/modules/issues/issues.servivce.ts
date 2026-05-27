@@ -21,31 +21,12 @@ const getSingleIssueFromDB = async (id: number) => {
 
   return result.rows[0];
 };
-// get single user issues
-const getSingleUserIssueFromDB = async (userId:number) => {
-  const query = `
-    SELECT 
-      issues.id AS issue_id,
-      issues.title,
-      issues.description,
-      issues.type,
-      issues.status,
-      issues.created_at,
-      
-      users.id AS user_id,
-      users.name,
-      users.email
-
-    FROM issues
-    JOIN users
-    ON issues.reported_id = users.id
-
-    WHERE users.id = $1
-
-    ORDER BY issues.created_at DESC
-  `;
-
-  const result = await pool.query(query, [userId]);
+// get single user all issues
+const getSingleUserIssueFromDB = async (userId: number) => {
+  const result = await pool.query(
+    `SELECT * FROM issues WHERE reported_id=$1`,
+    [userId]
+  );
 
   return result;
 };
@@ -85,6 +66,15 @@ const updateIssueFromDB = async (payLoad:IIssue)=>{
     );
     return result;
 }
+// delete single user Issue
+const deleteSingleUserIssuesFromDB = async (userId: number) => {
+  const result = await pool.query(
+    `DELETE FROM issues WHERE reported_id=$1`,
+    [userId]
+  );
+
+  return result.rowCount;
+};
 
 export const issuesService = {
   createIssuesIntoDB,
@@ -92,4 +82,5 @@ export const issuesService = {
   getAllIssuesFromDB,
   getSingleUserIssueFromDB,
   getSingleIssueFromDB,
+  deleteSingleUserIssuesFromDB,
 };

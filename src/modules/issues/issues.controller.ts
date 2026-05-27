@@ -27,7 +27,7 @@ const userId = Number(req.params.id);
        res.status(201).json({
         status:true,
         message:"Single issue shown successfully!!",
-        data:result.rows[0],
+        data:result.rows,
     });
   } catch (error:any) {
     res.status(404).json({
@@ -89,6 +89,24 @@ const updateIssues = async(req:Request, res:Response,) =>{
     error: error,
     });
   }
+};
+const deleteIssue = async(req: Request, res: Response)=>{
+  const userId = Number(req.params.id);
+  try {
+    const result = await issuesService.deleteSingleUserIssuesFromDB(userId);
+    res.status(201).json({
+        status:true,
+        message:"Issues Deleted successfully!!",
+        data:result,
+    });
+  } catch (error:any) {
+    res.status(500).json({
+    success: false,
+    message: error.message,
+    error: error,
+    });
+  }
+
 }
 
 export const issuesController = {
@@ -97,4 +115,5 @@ export const issuesController = {
     getAllIssues,
     getSingleUserIssue,
     getSingleIssue,
+    deleteIssue,
 }
