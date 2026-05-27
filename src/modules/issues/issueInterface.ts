@@ -4,5 +4,5 @@ title:string,
 description:string,
 type:string,
 status:string,
-reported_id:string,
+reported_id:number,
 }

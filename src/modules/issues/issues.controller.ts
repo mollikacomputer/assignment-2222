@@ -8,7 +8,7 @@ const getAllIssues = async(req: Request, res: Response)=>{
     const result = await issuesService.getAllIssuesFromDB();
         res.status(201).json({
         status:true,
-        message:"Issues created successfully!!",
+        message:"All Issues shown successfully!!",
         data:result.rows,
     });
   } catch (error:any) {
@@ -18,7 +18,44 @@ const getAllIssues = async(req: Request, res: Response)=>{
     error: error,
     });
   }
-}
+};
+// get singleUsers issues
+const getSingleIssue = async(req:Request, res:Response) =>{
+const userId = Number(req.params.id);
+  try {
+      const result = await issuesService.getSingleIssueFromDB(userId);
+       res.status(201).json({
+        status:true,
+        message:"Single issue shown successfully!!",
+        data:result.rows[0],
+    });
+  } catch (error:any) {
+    res.status(404).json({
+    success: false,
+    message: error.message,
+    error: error,
+    });
+  }
+};
+
+// get singleUsers issues
+const getSingleUserIssue = async(req:Request, res:Response) =>{
+const userId = Number(req.params.id);
+  try {
+      const result = await issuesService.getSingleUserIssueFromDB(userId);
+       res.status(201).json({
+        status:true,
+        message:"Single users all issue shown successfully!!",
+        data:result.rows,
+    });
+  } catch (error:any) {
+    res.status(404).json({
+    success: false,
+    message: error.message,
+    error: error,
+    });
+  }
+};
 // post api create issue
 const createIssue = async (req: Request, res: Response,) => {
   try {
@@ -58,4 +95,6 @@ export const issuesController = {
     createIssue,
     updateIssues,
     getAllIssues,
+    getSingleUserIssue,
+    getSingleIssue,
 }
