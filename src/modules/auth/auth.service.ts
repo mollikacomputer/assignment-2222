@@ -3,9 +3,10 @@ import bcrypt from "bcrypt";
 import type { IUser } from "../user/user.interface";
 import config from "../../config";
 import jwt from "jsonwebtoken"
+import type { Payload } from "./interface";
 
 
-
+// signup
 const signupUserIntoDB = async(payLoad:IUser)=>{
     const { name, email,password,role} = payLoad;
     const hashPassword = await bcrypt.hash(password, 10)
@@ -21,8 +22,8 @@ const signupUserIntoDB = async(payLoad:IUser)=>{
 
 
 // login service
-const loginUserIntoDB = async(payLoad:{email:string, password:string})=>{
-const {email, password} =payLoad;
+const loginUserIntoDB = async(payLoad:Payload)=>{
+const {email, password, role} =payLoad;
 
 const userData= await pool.query(`
     SELECT * FROM users WHERE email=$1
@@ -45,7 +46,7 @@ const matchPassword = await bcrypt.compare(password, user.password)
         id : user.id,
         name:user.name,
         email:user.email,
-
+        role:user.role,
     }
     const accessToken = jwt.sign(jwtpayload, config.secret as string, {expiresIn:"1d"});
     delete user.password;

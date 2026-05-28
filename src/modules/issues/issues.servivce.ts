@@ -7,7 +7,7 @@ const getAllIssuesFromDB = async()=>{
       SELECT id, title, description, type, reported_id FROM issues  
         `);
   return result;      
-}
+};
 const getSingleIssueFromDB = async (id: number) => {
   const result = await pool.query(
     `

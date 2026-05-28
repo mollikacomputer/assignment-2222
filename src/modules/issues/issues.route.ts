@@ -1,15 +1,18 @@
+
 import { Router } from "express";
 import { issuesController } from "./issues.controller";
-import issueMiddleware from "../../middleware/issueMiddleware";
+import role from "../../middleware/role";
 
 
 const router = Router();
 
+
+
 router.post('/', issuesController.createIssue );
 router.put('/:id', issuesController.updateIssues);
-router.get('/', issuesController.getAllIssues );
+router.get('/',role(), issuesController.getAllIssues );
 router.get('/:id', issuesController.getSingleUserIssue);
 router.delete('/:id', issuesController.deleteIssue)
-// router.get('/single/:id', issuesController.getSingleIssue)
+
 
 export const issuesRoute = router;

@@ -5,8 +5,6 @@ import { pool } from "../db";
 
 const auth = ()=>{
     return async (req : Request, res: Response, next: NextFunction)=>{
-// console.log("This is Protected route")
-// console.log(req.headers.authorization);
 const token = req.headers.authorization;
 // console.log(token);
 if(!token){
@@ -16,7 +14,7 @@ if(!token){
         message: "Unauthorized Access!!",
       });
 };
-const decoded = jwt.verify(token as string, config.secret as string) as JwtPayload
+const decoded = jwt.verify(token as string, config.secret as string) as JwtPayload;
 // console.log(decoded)
 const userData = await pool.query(`
     SELECT * FROM users WHERE email=$1
